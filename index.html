@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>Dublin Street Names - map by Conor O'Neill (@conoron)</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/Category_1.js"></script>
+        <script src="data/ManorWoman_2.js"></script>
+        <script src="data/Year_3.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:14
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        map.createPane('pane_OSMStandard_0');
+        map.getPane('pane_OSMStandard_0').style.zIndex = 400;
+        var layer_OSMStandard_0 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            pane: 'pane_OSMStandard_0',
+            opacity: 0.5,
+            attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
+            minZoom: 14,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OSMStandard_0;
+        map.addLayer(layer_OSMStandard_0);
+        function pop_Category_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Namesake</th>\
+                        <td>' + (feature.properties['Namesake'] !== null ? autolinker.link(feature.properties['Namesake'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Earliest appearance of name</th>\
+                        <td>' + (feature.properties['Name year'] !== null ? autolinker.link(feature.properties['Name year'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['Category 2'] !== null ? autolinker.link(feature.properties['Category 2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">More info</th>\
+                        <td>' + (feature.properties['More info'] !== null ? autolinker.link(feature.properties['More info'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Category_1_0(feature) {
+            switch(String(feature.properties['Category 2'])) {
+                case 'Irish Political Figure':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(38,206,63,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Royalty':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(1,14,255,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Nobility':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(81,138,237,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Lord Lieutenant of Ireland':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(1,166,255,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Lord Mayor of Dublin':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(74,234,240,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Politician':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(126,168,187,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Property Owner or Developer':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(237,153,49,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Religious figure':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(226,116,224,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Religious Institution':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(170,28,222,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Physical characteristics or place':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Other person':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(140,140,140,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Unknown':
+                    return {
+                pane: 'pane_Category_1',
+                opacity: 1,
+                color: 'rgba(225,225,225,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Category_1');
+        map.getPane('pane_Category_1').style.zIndex = 401;
+        map.getPane('pane_Category_1').style['mix-blend-mode'] = 'normal';
+        var layer_Category_1 = new L.geoJson(json_Category_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Category_1',
+            layerName: 'layer_Category_1',
+            pane: 'pane_Category_1',
+            onEachFeature: pop_Category_1,
+            style: style_Category_1_0,
+        });
+        bounds_group.addLayer(layer_Category_1);
+        function pop_ManorWoman_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Namesake</th>\
+                        <td>' + (feature.properties['Namesake'] !== null ? autolinker.link(feature.properties['Namesake'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">More info</th>\
+                        <td>' + (feature.properties['More info'] !== null ? autolinker.link(feature.properties['More info'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ManorWoman_2_0(feature) {
+            switch(String(feature.properties['q2wHide_MaleFemale'])) {
+                case 'Female':
+                    return {
+                pane: 'pane_ManorWoman_2',
+                opacity: 1,
+                color: 'rgba(255,1,90,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Male':
+                    return {
+                pane: 'pane_ManorWoman_2',
+                opacity: 1,
+                color: 'rgba(1,115,255,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'n/a':
+                    return {
+                pane: 'pane_ManorWoman_2',
+                opacity: 1,
+                color: 'rgba(99,99,99,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_ManorWoman_2',
+                opacity: 1,
+                color: 'rgba(199,199,199,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_ManorWoman_2');
+        map.getPane('pane_ManorWoman_2').style.zIndex = 402;
+        map.getPane('pane_ManorWoman_2').style['mix-blend-mode'] = 'normal';
+        var layer_ManorWoman_2 = new L.geoJson(json_ManorWoman_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ManorWoman_2',
+            layerName: 'layer_ManorWoman_2',
+            pane: 'pane_ManorWoman_2',
+            onEachFeature: pop_ManorWoman_2,
+            style: style_ManorWoman_2_0,
+        });
+        bounds_group.addLayer(layer_ManorWoman_2);
+        function pop_Year_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? autolinker.link(feature.properties['Name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Namesake</th>\
+                        <td>' + (feature.properties['Namesake'] !== null ? autolinker.link(feature.properties['Namesake'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Earliest appearance of the name</th>\
+                        <td>' + (feature.properties['Name year'] !== null ? autolinker.link(feature.properties['Name year'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">More info</th>\
+                        <td>' + (feature.properties['More info'] !== null ? autolinker.link(feature.properties['More info'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Year_3_0(feature) {
+            switch(String(feature.properties['q2wHide_Year range'])) {
+                case 'pre-1400':
+                    return {
+                pane: 'pane_Year_3',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1400s':
+                    return {
+                pane: 'pane_Year_3',
+                opacity: 1,
+                color: 'rgba(100,26,128,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1500s':
+                    return {
+                pane: 'pane_Year_3',
+                opacity: 1,
+                color: 'rgba(140,41,129,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1600s':
+                    return {
+                pane: 'pane_Year_3',
+                opacity: 1,
+                color: 'rgba(182,55,122,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1700s':
+                    return {
+                pane: 'pane_Year_3',
+                opacity: 1,
+                color: 'rgba(221,74,105,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1728':
+                    return {
+                pane: 'pane_Year_3',
+                opacity: 1,
+                color: 'rgba(246,111,92,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1756':
+                    return {
+                pane: 'pane_Year_3',
+                opacity: 1,
+                color: 'rgba(254,159,109,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1800s':
+                    return {
+                pane: 'pane_Year_3',
+                opacity: 1,
+                color: 'rgba(254,206,145,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case '1900s':
+                    return {
+                pane: 'pane_Year_3',
+                opacity: 1,
+                color: 'rgba(252,253,191,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Unknown':
+                    return {
+                pane: 'pane_Year_3',
+                opacity: 1,
+                color: 'rgba(235,235,235,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 5.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Year_3');
+        map.getPane('pane_Year_3').style.zIndex = 403;
+        map.getPane('pane_Year_3').style['mix-blend-mode'] = 'normal';
+        var layer_Year_3 = new L.geoJson(json_Year_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Year_3',
+            layerName: 'layer_Year_3',
+            pane: 'pane_Year_3',
+            onEachFeature: pop_Year_3,
+            style: style_Year_3_0,
+        });
+        bounds_group.addLayer(layer_Year_3);
+        map.addLayer(layer_Year_3);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>Dublin Street Names - map by Conor O\'Neill (@conoron)</h2>';
+            };
+            title.addTo(map);
+            var abstract = new L.Control({'position':'bottomleft'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+                    this._div.setAttribute("onmouseenter", "abstract.show()");
+                    this._div.setAttribute("onmouseleave", "abstract.hide()");
+                    this.hide();
+                    return this._div;
+                };
+                abstract.hide = function () {
+                    this._div.classList.remove("abstractUncollapsed");
+                    this._div.classList.add("abstract");
+                    this._div.innerHTML = 'i'
+                }
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'An interactive map showing the origins of some of Dublin\'s street names.<br /><br />Check out @conoron on Twitter for more maps.<br /><br />Mostly sourced from "Dublin Street Names, Dated and Explained" by CT McCready (available on Google Books). Other sources include @Dublin_Streets on Twitter, and "A Little History of the Future of Dublin" by Frank McDonald.';
+            };
+            abstract.addTo(map);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'Year<br /><table><tr><td style="text-align: center;"><img src="legend/Year_3_pre14000.png" /></td><td>pre-1400</td></tr><tr><td style="text-align: center;"><img src="legend/Year_3_1400s1.png" /></td><td>1400s</td></tr><tr><td style="text-align: center;"><img src="legend/Year_3_1500s2.png" /></td><td>1500s</td></tr><tr><td style="text-align: center;"><img src="legend/Year_3_1600s3.png" /></td><td>1600s</td></tr><tr><td style="text-align: center;"><img src="legend/Year_3_1700s4.png" /></td><td>1700s</td></tr><tr><td style="text-align: center;"><img src="legend/Year_3_17285.png" /></td><td>1728</td></tr><tr><td style="text-align: center;"><img src="legend/Year_3_17566.png" /></td><td>1756</td></tr><tr><td style="text-align: center;"><img src="legend/Year_3_1800s7.png" /></td><td>1800s</td></tr><tr><td style="text-align: center;"><img src="legend/Year_3_1900s8.png" /></td><td>1900s</td></tr><tr><td style="text-align: center;"><img src="legend/Year_3_Unknown9.png" /></td><td>Unknown</td></tr></table>': layer_Year_3,'Man or Woman?<br /><table><tr><td style="text-align: center;"><img src="legend/ManorWoman_2_Female0.png" /></td><td>Female</td></tr><tr><td style="text-align: center;"><img src="legend/ManorWoman_2_Male1.png" /></td><td>Male</td></tr><tr><td style="text-align: center;"><img src="legend/ManorWoman_2_Notnamedafteraperson2.png" /></td><td>Not named after a person</td></tr><tr><td style="text-align: center;"><img src="legend/ManorWoman_2_Unknown3.png" /></td><td>Unknown</td></tr></table>': layer_ManorWoman_2,'Category<br /><table><tr><td style="text-align: center;"><img src="legend/Category_1_IrishPoliticalFigure0.png" /></td><td>Irish Political Figure</td></tr><tr><td style="text-align: center;"><img src="legend/Category_1_Royalty1.png" /></td><td>Royalty</td></tr><tr><td style="text-align: center;"><img src="legend/Category_1_Nobility2.png" /></td><td>Nobility</td></tr><tr><td style="text-align: center;"><img src="legend/Category_1_LordLieutenantofIreland3.png" /></td><td>Lord Lieutenant of Ireland</td></tr><tr><td style="text-align: center;"><img src="legend/Category_1_LordMayorofDublin4.png" /></td><td>Lord Mayor of Dublin</td></tr><tr><td style="text-align: center;"><img src="legend/Category_1_Politician5.png" /></td><td>Politician</td></tr><tr><td style="text-align: center;"><img src="legend/Category_1_PropertyOwnerorDeveloper6.png" /></td><td>Property Owner or Developer</td></tr><tr><td style="text-align: center;"><img src="legend/Category_1_Religiousfigure7.png" /></td><td>Religious figure</td></tr><tr><td style="text-align: center;"><img src="legend/Category_1_ReligiousInstitution8.png" /></td><td>Religious Institution</td></tr><tr><td style="text-align: center;"><img src="legend/Category_1_Physicalcharacteristicsorplace9.png" /></td><td>Physical characteristics or place</td></tr><tr><td style="text-align: center;"><img src="legend/Category_1_Otherperson10.png" /></td><td>Other person</td></tr><tr><td style="text-align: center;"><img src="legend/Category_1_Unknown11.png" /></td><td>Unknown</td></tr></table>': layer_Category_1,"OSM Standard": layer_OSMStandard_0,}).addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_Category_1,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'Name'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        resetLabels([layer_Year_3]);
+        map.on("zoomend", function(){
+            resetLabels([layer_Year_3]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_Year_3]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_Year_3]);
+        });
+        </script>
+    </body>
+</html>
